@@ -1,3 +1,8 @@
+#-----------------------------------------------------#
+# Author: Faruk Gurbuz
+# Date: 03/15/2021
+#-----------------------------------------------------#
+
 from string import Template
 import os
 from secrets import choice
