@@ -41,6 +41,8 @@ class GlobalFileCreator:
 
         if component2print == None:
             self.comp2print = ['Time', 'LinkID', 'State0']
+        else:
+            self.comp2print = component2print
         self.comp2print = self._CombineList(self.comp2print)
 
         try:
@@ -145,6 +147,9 @@ class GlobalFileCreator:
         elif self.model_type == 254:
             _Template = '../base_files/254BaseGlobal.gbl'
             assert n_params == 12
+        elif self.model_type == 255:
+            _Template = '../base_files/255BaseGlobal.gbl'
+            assert n_params == 3
 
         file_gbl = open(_Template, 'r') 
         template_gbl = file_gbl.read()

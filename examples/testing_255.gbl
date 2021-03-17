@@ -1,5 +1,5 @@
 %Model UID
-254
+255
 
 %Begin and end date time
 2018-04-01 12:00
@@ -9,18 +9,19 @@
 0
 
 %Components to print
-3
+4
 Time
 LinkID
 State0
+State1
 
 
 %Peakflow function
 Classic
 
 %Global parameters
-%12 v_0 lambda_1 lambda_2 v_h  k_3       k_I_factor h_b S_L  A   B    exponent vb
-12  0.33  0.2    -0.1   0.02  2.0425e-6 0.02       0.5 0.10 0.0 99.0 3.0 0.75
+%3 v_0 lambda_1 lambda_2
+3  0.33  0.2    -0.1
 
 %No. steps stored at each link and
 %Max no. steps transfered between procs
