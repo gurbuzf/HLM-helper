@@ -29,3 +29,4 @@ The docstring can be accesed via `help(GlobalFileCreator)`.
 
 ----
 
+# A tool to prepare global files for HLM
