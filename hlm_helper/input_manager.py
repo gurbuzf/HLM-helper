@@ -1,6 +1,6 @@
 #-----------------------------------------------------#
 # Author: Faruk Gurbuz
-# Date: 03/15/2021
+# Date: 06/22/2021
 #-----------------------------------------------------#
 
 from string import Template
@@ -11,26 +11,48 @@ from datetime import datetime as dt
 
 class GlobalFileCreator:
     ''' 
-    Creates global file for HLM
-        Parameters:
-            args:dict, includes key, item pairs used to create gbl file. Items are in string format.
-                keys: ['begin' 'end' 'Parameters' 'rvr_path' 'prm_path' 'initialCond_path' 'rainfall_path' 'evap_path' 
-                    'output_path' 'sav_path' 'scratch_path','dam_path', 'snapshot_path']
-                if rain_type is 2 or 5, add 'chunk_size', 'time_resolution', 'bin_unix1', 'bin_unix2' in args.
+    Creates global file for Iowa Flood Center's Hillslope-Link Model
 
-            model_type:int, 190 or 254
-            rain_type:int, if binary (2) or forecasting (i.e.irregular binary) (5) is used, 
-                    provide this information. otherwise an error will be raised.
-            out_resolution: the output hydriograph time resolution (min)
-            sav_type:int, if 3, the hydrographs for all links will be saved.
-                        In that case, no need to add sav_path in args.
-            component2print:list, a list of strings including the states to be printed.
-                        default: ['Time', 'LinkID', 'State0'] 
+    ...
 
-        NOTE: All path variables, except scratch_path, must include relevant extension.
-              'begin' and 'end' must be unix_time
-              For model_type=190: Parameter order [v_r  lambda_1  lambda_2  RC    v_h  v_g]
-              For model_type=254: Parameter order [v_0 lambda_1 lambda_2 v_h  k_3       k_I_factor h_b S_L  A   B    exponent vb]
+    Attributes:
+    ---------------------
+        args : dict, 
+            includes key, item pairs used to create gbl file. Items are in string format.
+            keys: ['begin' 'end' 'Parameters' 'rvr_path' 'prm_path' 'initialCond_path' 'rainfall_path' 'evap_path' 
+                   'output_path' 'sav_path' 'scratch_path','dam_path', 'snapshot_path']
+            if rain_type is 2 or 5, add 'chunk_size', 'time_resolution', 'bin_unix1', 'bin_unix2' in args.
+
+        model_type : int, 
+                190, 254, 255
+        rain_type:int, 
+                if binary (2) or forecasting (i.e.irregular binary) (5) is used, 
+                provide this information. otherwise an error will be raised.
+        out_resolution:float, 
+                the output hydriograph time resolution (min)
+        sav_type:int, 
+                if 3, the hydrographs for all links will be saved.
+                In that case, no need to add sav_path in args.
+        component2print:list, 
+                a list of strings including the states to be printed.
+                default: ['Time', 'LinkID', 'State0'] 
+    
+    Methods:
+    ---------------------
+        WriteGlobal(gbl_name)
+            writes the attributes of the GlobalFileCreator object into a gbl file 
+
+    NOTE: All path variables, except scratch_path, must include relevant extension.
+            'begin' and 'end' must be unix_time
+            For model_type=190: Parameter order [v_r  lambda_1  lambda_2  RC    v_h  v_g]
+            For model_type=254: Parameter order [v_0 lambda_1 lambda_2 v_h  k_3       k_I_factor h_b S_L  A   B    exponent vb]
+            For model_type=255: Parameter order [v_0 lambda_1 lambda_2] !prm file includes the rest of the parameters. 
+
+            1. Model 190 is the simplest version of the HLM and uses a constant runoff coefficient 
+            2. Model 254 uses a nonlinear scheme for partitioning of ponded water into runoff and infiltration.
+            3. Model 255 is an extension of Model 254. Reservoirs can be added into this model.   
+
+            Visit https://github.com/Iowa-Flood-Center/asynch for more information.
     '''
 
     def __init__(self, args, model_type=190, rain_type=None, out_resolution=60.0, sav_type=None,component2print=None):
@@ -93,7 +115,6 @@ class GlobalFileCreator:
         self.rvr_type = topo_flags[rvr_type]
         self.prm_type = topo_flags[prm_type]
 
-
         ini_flags = {'ini':0, 'uini':1, 'rec':2, 'dbc':3, 'h5':4}
         ini_type = self.initialCond_path.split('.')[-1]
         self.ini_type = ini_flags[ini_type]
@@ -139,16 +160,17 @@ class GlobalFileCreator:
                 gbl_name:str, the name of global file to be saved without extension (optional)
                               full path can be given together with the gbl_name
         '''
+        path_parent = 'c:\\Users\\gurbuz\\Desktop\\HLM_helper'
         gbl_params = self.Parameters.split(' ')
         n_params = len([i for i in gbl_params if i!=''])
         if self.model_type == 190:
-            _Template = '../base_files/190BaseGlobal.gbl'
+            _Template = path_parent + '\\base_files\\190BaseGlobal.gbl'
             assert n_params == 6
         elif self.model_type == 254:
-            _Template = '../base_files/254BaseGlobal.gbl'
+            _Template = path_parent + '\\base_files\\254BaseGlobal.gbl'
             assert n_params == 12
         elif self.model_type == 255:
-            _Template = '../base_files/255BaseGlobal.gbl'
+            _Template = path_parent + '\\base_files\\255BaseGlobal.gbl'
             assert n_params == 3
 
         file_gbl = open(_Template, 'r') 

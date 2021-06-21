@@ -59,7 +59,7 @@ Classic
 
 %Where to put write hydrographs
 %(0 = no output, 1 = .dat file, 2 = .csv file, 3 = database, 5 = .h5)
-5 60.0 output.h5
+5 15.0 output.h5
 
 %Where to put peakflow data
 %(0 = no output, 1 = .pea file, 2 = database)
