@@ -1,10 +1,10 @@
 # hlm_helper 
-----
-Set of tools facilitating use of Hillslope-link Model. 
+
+Set of tools facilitating use of Hillslope-Link Model. 
 <br>
 
 ## Documentation 
-----
+
     from hlm_helper.input_manager import GlobalFileCreator
     args = {'begin':1522584000, 
             'end':1543665600, 
@@ -28,5 +28,3 @@ Set of tools facilitating use of Hillslope-link Model.
 The docstring can be accesed via `help(GlobalFileCreator)`.
 
 ----
-
-# A tool to prepare global files for HLM

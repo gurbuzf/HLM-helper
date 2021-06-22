@@ -15,6 +15,8 @@ setup(
         description='hlm_helper',
         long_description='Set of tools facilitating use of Hillslope-link Model',
         packages=find_packages(),
+        package_dir={'hlm_helper': 'hlm_helper'},
+        package_data={'hlm_helper': ['base_files/*.gbl']},
         install_requires=[], # add any additional packages that 
         # needs to be installed along with your package. Eg: 'caer'
         

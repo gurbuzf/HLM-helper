@@ -160,17 +160,19 @@ class GlobalFileCreator:
                 gbl_name:str, the name of global file to be saved without extension (optional)
                               full path can be given together with the gbl_name
         '''
-        path_parent = 'c:\\Users\\gurbuz\\Desktop\\HLM_helper'
+        import os
+        this_dir, this_filename = os.path.split(__file__)
+        path_parent = os.path.join(this_dir, "base_files")
         gbl_params = self.Parameters.split(' ')
         n_params = len([i for i in gbl_params if i!=''])
         if self.model_type == 190:
-            _Template = path_parent + '\\base_files\\190BaseGlobal.gbl'
+            _Template = os.path.join(path_parent, '190BaseGlobal.gbl')
             assert n_params == 6
         elif self.model_type == 254:
-            _Template = path_parent + '\\base_files\\254BaseGlobal.gbl'
+            _Template = os.path.join(path_parent, '254BaseGlobal.gbl')
             assert n_params == 12
         elif self.model_type == 255:
-            _Template = path_parent + '\\base_files\\255BaseGlobal.gbl'
+            _Template = os.path.join(path_parent, '255BaseGlobal.gbl')
             assert n_params == 3
 
         file_gbl = open(_Template, 'r') 
