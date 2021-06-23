@@ -29,7 +29,7 @@ class GlobalFileCreator:
                 if binary (2) or forecasting (i.e.irregular binary) (5) is used, 
                 provide this information. otherwise an error will be raised.
         out_resolution:float, 
-                the output hydriograph time resolution (min)
+                the output hydrograph time resolution (min)
         sav_type:int, 
                 if 3, the hydrographs for all links will be saved.
                 In that case, no need to add sav_path in args.
