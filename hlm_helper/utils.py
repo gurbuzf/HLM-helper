@@ -110,7 +110,7 @@ def initialcondition4hillslopes(qmin, At_up, A_up, k3=340, s_ponded=0.0, s_topla
             initial condition for channel flow
 
         s_p : list 
-            initial condition of ponding 
+            initial condition for ponding 
 
         s_t : list 
             initial condition for top layer 
@@ -208,27 +208,77 @@ def write_ustr(rainfall_ts, time, fullpath):
         for i, t in enumerate(time):
             ustr.write(f'{t} {rainfall_ts[i]}\n')
 
+def create_ini_file(model_type, ini_path, links, q, s_p, s_s, s_t=None, \
+                    dam_links=None, S=None, initial_time=0):
+    """Writes initial conditions in  a 'ini' file
 
+    Parameters
+    ----------
+    model_typr : int
+        type of the HLM model (190, 254, 255)
+    
+    ini_path : str
+        path for the 'ini' file --with 'ini' extension--
+    
+    links : list
+        list of the link ids
 
-# def create_ini_file(links, q, s_p, s_t, s_s, f_name, model_type, initial_time=0):
-#     n_links = len(links)
-#     if model_type == 190:
-#         with open(f_name, 'w') as ini:
-#             ini.write(f'{model_type}\n')
-#             ini.write(f'{n_links}\n')
-#             ini.write(f'{initial_time}\n')
-#             i = 0
-#             for link in links:
-#                 ini.write(f'{link}\n')
-#                 ini.write(f'{q[i]} {s_p[i]} {s_s[i]}\n\n')
-#                 i += 1
-#     elif model_type == 254:
-#         with open(f_name, 'w') as ini:
-#             ini.write(f'{model_type}\n')
-#             ini.write(f'{n_links}\n')
-#             ini.write(f'{initial_time}\n')
-#             i = 0
-#             for link in links:
-#                 ini.write(f'{link}\n')
-#                 ini.write(f'{q[i]} {s_p[i]}  {s_t[i]} {s_s[i]}\n\n')
-#                 i += 1
+    q : list
+        initial condition for channel flow
+    
+    s_p : list
+        initial condition for ponding 
+    
+    s_s : list 
+        initial condition for subsurface
+
+    s_t : list  (default None)
+        initial condition for top layer. 190 does not have this state. 
+            if model_type is 254, this state must be given
+    
+    dam_links : list (default None)
+        links where a dam is located. Only for model_type=255
+
+    S : list (default None)
+        list of the initial storages of the dams. Only for model_type=255.
+            the order must follow  'dam_links' 
+    
+    Returns
+    --------
+        None   
+    
+    """
+    n_links = len(links)
+    if model_type == 190:
+        with open(ini_path, 'w') as ini:
+            ini.write(f'{model_type}\n')
+            ini.write(f'{n_links}\n')
+            ini.write(f'{initial_time}\n')
+            for i, link in enumerate(links):
+                ini.write(f'{link}\n')
+                ini.write(f'{q[i]} {s_p[i]} {s_s[i]}\n\n')
+        
+    elif model_type == 254:
+        with open(ini_path, 'w') as ini:
+            ini.write(f'{model_type}\n')
+            ini.write(f'{n_links}\n')
+            ini.write(f'{initial_time}\n')
+            for i, link in enumerate(links):
+                ini.write(f'{link}\n')
+                ini.write(f'{q[i]} {s_p[i]}  {s_t[i]} {s_s[i]}\n\n')
+
+    elif model_type == 255:
+        with open(ini_path, 'w') as ini:
+            ini.write('255\n')
+            ini.write(f'{n_links}\n')
+            ini.write(f'{initial_time}\n')
+            
+            for i, link in enumerate(links):
+                ini.write(f'{link}\n')
+                if link in dam_links:
+                    ind = dam_links.index(link)
+                    _S = S[ind]
+                else:
+                    _S = 0
+                ini.write(f'{q[i]} {_S}  {s_p[i]}  {s_t[i]} {s_s[i]}\n\n')    
+

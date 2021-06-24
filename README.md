@@ -5,6 +5,9 @@ Set of tools facilitating use of Hillslope-Link Model.
 
 ## Documentation 
 
+ * **Creating Global File** 
+---
+
     from hlm_helper.input_manager import GlobalFileCreator
     args = {'begin':1522584000, 
             'end':1543665600, 
@@ -15,7 +18,7 @@ Set of tools facilitating use of Hillslope-Link Model.
             'rainfall_path':'unirain.ustr', 
             'evap_path':'evap_average.mon', 
             'output_path':'output.h5', 
-            'scratch_path':'/nfsscratch/Users/gurbuz/tmp',
+            'scratch_path':'tmp',
             'dam_path':'test.dam',
             'sav_path':'test.sav'
             }
@@ -27,4 +30,18 @@ Set of tools facilitating use of Hillslope-Link Model.
 
 The docstring can be accesed via `help(GlobalFileCreator)`.
 
-----
+ * **Creating 'ini' File** 
+---
+
+    from hlm_helper.utils import (read_prm,
+                                  initialcondition4hillslopes, 
+                                  create_ini_file)
+
+    links, A_i, L_i, A_h = read_prm('../GeneralFiles/turkey.prm')
+    q, s_p, s_t, s_s = initialcondition4hillslopes(30, max(A_i), A_i, k3=340, s_toplayer=0.2)
+    create_ini_file(254, '../GeneralFiles/initial_conditions254.ini', links, q, s_p, s_s, s_t)
+    create_ini_file(190, '../GeneralFiles/initial_conditions190.ini', links, q, s_p, s_s, s_t=None)
+
+
+Use `help()` to access the docstring for each function used here.  
+
