@@ -279,6 +279,6 @@ def create_ini_file(model_type, ini_path, links, q, s_p, s_s, s_t=None, \
                     ind = dam_links.index(link)
                     _S = S[ind]
                 else:
-                    _S = 0
+                    _S = 0.0
                 ini.write(f'{q[i]} {_S}  {s_p[i]}  {s_t[i]} {s_s[i]}\n\n')    
 
